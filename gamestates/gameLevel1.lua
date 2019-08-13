@@ -1,42 +1,51 @@
 -- Import our libraries.
-bump = require 'libs.bump.bump'
-Gamestate = require 'libs.hump.gamestate'
+local Gamestate = require 'libs.hump.gamestate'
+local Class = require 'libs.hump.class'
 
--- Import our Entity system.
-local Entities = require 'entities.Entities'
-local Entity = require 'entities.Entity'
+-- Grab our base class
+local levelBase = require 'gamestates.levelBase'
 
--- Create our Gamestate
-local gameLevel1 = Gamestate.new()
-
--- Import the Entities we build.
+-- Import the Entities we will build.
 local Player = require 'entities.player'
-local Ground = require 'entities.ground'
+local camera = require 'libs.camera'
 
 -- Declare a couple immportant variables
 player = nil
-world = nil
+
+local gameLevel1 = Class{
+  __includes = levelBase
+}
+
+function gameLevel1:init()
+  levelBase.init(self, 'assets/levels/level1.lua')
+end
 
 function gameLevel1:enter()
-  -- Game Levels do need collisions.
-  world = bump.newWorld(16) -- Create a world for bump to function in.
-
-  -- Initialize our Entity System
-  Entities:enter()
-  player = Player(world, 16, 16)
-  ground_0 = Ground(world, 120, 360, 640, 16)
-  ground_1 = Ground(world, 0, 448, 640, 16)
-
-  -- Add instances of our entities to the Entity List
-  Entities:addMany({player, ground_0, ground_1})
+  player = Player(self.world,  32, 64)
+  levelBase.Entities:add(player)
 end
 
 function gameLevel1:update(dt)
-  Entities:update(dt) -- this executes the update function for each individual Entity
+  self.map:update(dt) -- remember, we inherited map from LevelBase
+  levelBase.Entities:update(dt) -- this executes the update function for each individual Entity
+
+  levelBase.positionCamera(self, player, camera)
 end
 
 function gameLevel1:draw()
-  Entities:draw() -- this executes the draw function for each individual Entity
+  -- Attach the camera before drawing the entities
+  camera:set()
+
+  self.map:draw(-camera.x, -camera.y) -- Remember that we inherited map from LevelBase
+  levelBase.Entities:draw() -- this executes the draw function for each individual Entity
+
+  camera:unset()
+  -- Be sure to detach after running to avoid weirdness
+end
+
+-- All levels will have a pause menu
+function gameLevel1:keypressed(key)
+  levelBase:keypressed(key)
 end
 
 return gameLevel1
