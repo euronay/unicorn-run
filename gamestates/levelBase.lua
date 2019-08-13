@@ -23,6 +23,7 @@ local levelBase = Class{
 }
 
 function levelBase:keypressed(key)
+    if key == "escape" then love.event.push("quit") end
     -- All levels will have a pause menu
     if Gamestate.current() ~= pause and key == 'p' then Gamestate.push(pause) end
 end

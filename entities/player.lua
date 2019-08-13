@@ -1,22 +1,27 @@
 local Class = require 'libs.hump.class'
 local Entity = require 'entities.Entity'
+local anim8 = require 'libs.anim8.anim8'
 
 local player = Class{
   __includes = Entity -- Player class inherits our Entity class
 }
 
 function player:init(world, x, y)
-  self.img = love.graphics.newImage('/assets/Black_Sheep_Run.png')
 
-  Entity.init(self, world, x, y, self.img:getWidth(), self.img:getHeight())
+  self.runImg = love.graphics.newImage('/assets/player-run.png')
+  local g = anim8.newGrid(128, 128, self.runImg:getWidth(), self.runImg:getHeight())
+  self.runAnim = anim8.newAnimation(g('1-6', 1), 0.1)
+
+
+  Entity.init(self, world, x, y, 128, 128)
 
   -- Add our unique player values
   self.xVelocity = 0 -- current velocity on x, y axes
   self.yVelocity = 0
   self.acc = 100 -- the acceleration of our player
-  self.maxSpeed = 600 -- the top speed
+  self.maxSpeed = 200 -- the top speed
   self.friction = 20 -- slow our player down - we could toggle this situationally to create icy or slick platforms
-  self.gravity = 80 -- we will accelerate towards the bottom
+  self.gravity = 200 -- we will accelerate towards the bottom
 
     -- These are values applying specifically to jumping
   self.isJumping = false -- are we in the process of jumping?
@@ -29,13 +34,18 @@ function player:init(world, x, y)
 end
 
 function player:collisionFilter(other)
-  local x, y, w, h = self.world:getRect(other)
-  local playerBottom = self.y + self.h
-  local otherBottom = y + h
+  -- local x, y, w, h = self.world:getRect(other)
+  -- local playerBottom = self.y + self.h
+  -- local otherBottom = y + h
 
-  if playerBottom <= y then -- bottom of player collides with top of platform.
+  -- if playerBottom <= y then -- bottom of player collides with top of platform.
+  --   return 'slide'
+  -- end
+  
+  if other.properties.collidable then
     return 'slide'
   end
+
 end
 
 function player:update(dt)
@@ -82,10 +92,14 @@ function player:update(dt)
       self.isGrounded = true
     end
   end
+
+  -- Update animation
+  self.runAnim:update(dt)
 end
 
 function player:draw()
-  love.graphics.draw(self.img, self.x, self.y)
+  self.runAnim:draw(self.runImg, self.x, self.y)
+  --love.graphics.draw(self.img, self.x, self.y)
 end
 
 return player
