@@ -8,8 +8,8 @@ return {
   height = 6,
   tilewidth = 128,
   tileheight = 128,
-  nextlayerid = 14,
-  nextobjectid = 12,
+  nextlayerid = 15,
+  nextobjectid = 17,
   properties = {},
   tilesets = {
     {
@@ -230,6 +230,71 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 6, 7, 7, 8, 0, 0, 0, 0, 0, 0, 1, 13, 14, 0, 0, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 1, 13, 13, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 17, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         13, 13, 13, 5, 17, 17, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 17, 17, 2, 13, 13, 13, 13, 13, 13, 13, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+      }
+    },
+    {
+      type = "objectgroup",
+      id = 14,
+      name = "Entities",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 13,
+          name = "",
+          type = "star",
+          shape = "point",
+          x = 449,
+          y = 455,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 14,
+          name = "",
+          type = "star",
+          shape = "point",
+          x = 570,
+          y = 455,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 15,
+          name = "",
+          type = "star",
+          shape = "point",
+          x = 695,
+          y = 455,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 16,
+          name = "",
+          type = "star",
+          shape = "point",
+          x = 827,
+          y = 455,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
       }
     }
   }

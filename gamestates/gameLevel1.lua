@@ -9,6 +9,8 @@ local levelBase = require 'gamestates.levelBase'
 local Player = require 'entities.player'
 local camera = require 'libs.camera'
 
+local Star = require 'entities.star'
+
 -- Declare a couple immportant variables
 player = nil
 
@@ -23,6 +25,19 @@ end
 function gameLevel1:enter()
   player = Player(self.world,  32, 64)
   levelBase.Entities:add(player)
+
+  -- TODO move this logic to lavelBase
+  -- load objects from map
+  for _, layer in pairs(self.map.layers) do
+    if layer.type == 'objectgroup' and layer.name == "Entities" then
+      for _, object in ipairs( layer.objects ) do
+        if object.type == "star" then
+          local star = Star(self.world, object.x, object.y)
+          levelBase.Entities:add(star)
+        end
+      end
+    end
+  end
 end
 
 function gameLevel1:update(dt)
