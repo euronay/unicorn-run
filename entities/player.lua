@@ -1,5 +1,5 @@
 local Class = require 'libs.hump.class'
-local Entity = require 'entities.Entity'
+local Entity = require 'entities.entity'
 local anim8 = require 'libs.anim8.anim8'
 local states = require 'libs.states'
 
@@ -9,9 +9,15 @@ local player = Class{
 
 function player:init(world, x, y)
 
-  self.runImg = love.graphics.newImage('/assets/player-run.png')
-  local g = anim8.newGrid(128, 128, self.runImg:getWidth(), self.runImg:getHeight())
-  self.runAnim = anim8.newAnimation(g('1-6', 1), 0.1)
+  self.images = {}
+  self.images.standing = love.graphics.newImage('/assets/player-idle.png')
+  self.images.running = love.graphics.newImage('/assets/player-run.png')
+  self.images.jumping = self.images.running
+  self.images.falling = self.images.running
+  
+  local g = anim8.newGrid(128, 128, 768, 128) -- animation for 6 frame caharcter sprite
+  self.rightAnim = anim8.newAnimation(g('1-6', 1), 0.1)
+  self.leftAnim = self.rightAnim:clone():flipH()
 
 
   Entity.init(self, world, x, y, 128, 128)
@@ -177,11 +183,16 @@ function player:update(dt)
   self:updateState(dt)
 
   -- Update animation
-  self.runAnim:update(dt)
+  self.rightAnim:update(dt)
+  self.leftAnim:update(dt)
 end
 
 function player:draw()
-  self.runAnim:draw(self.runImg, self.x, self.y)
+  if self.xVelocity < 0 then
+    self.leftAnim:draw(self.images[self.state], self.x, self.y)
+  else
+    self.rightAnim:draw(self.images[self.state], self.x, self.y)
+  end
   --love.graphics.draw(self.img, self.x, self.y)
 end
 
